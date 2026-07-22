@@ -1,0 +1,136 @@
+.main-header {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e2e8f0;
+
+  .header-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* 1. Le Logo */
+  .logo-link {
+    display: flex;
+    align-items: center;
+    height: 100px;
+
+    .logo {
+      height: 100%;
+      width: auto;
+    }
+  }
+
+/* 2. Navigation Desktop (Liens + Recherche alignés) */
+  .desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px; // On réduit l'espace pour que ça respire moins mais que ça tienne
+
+    .category-list {
+      display: flex;
+      list-style: none;
+      gap: 16px; // On réduit aussi l'espace entre les liens de catégories
+      margin: 0;
+      padding: 0;
+
+      a {
+        font-weight: 600;
+        color: #333333;
+        transition: color 0.2s;
+        white-space: nowrap; // Empêche les mots des catégories de se couper sur deux lignes
+
+        &:hover {
+          color: #004999;
+        }
+      }
+    }
+
+    .search-bar {
+      input {
+        width: 150px; // On donne une largeur fixe ou plus compacte pour éviter qu'elle n'explose la boîte
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-family: inherit;
+        outline: none;
+
+        &:focus {
+          border-color: #004999;
+          width: 180px; // Optionnel : s'élargit un peu quand on clique dessus
+          transition: width 0.3s ease;
+        }
+      }
+    }
+  }
+
+  /* 3. Navigation Mobile (cachée par défaut sur desktop si besoin, ou adaptée) */
+  .mobile-nav {
+    display: none; // Tu pourras activer l'affichage en media query mobile plus tard
+    align-items: center;
+    gap: 8px;
+
+    button {
+      background: none;
+      border: 1px solid #ccc;
+      padding: 6px 10px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+  }
+
+  /* Media query simple pour basculer desktop/mobile si besoin */
+  @media (max-width: 768px) {
+    .desktop-nav {
+      display: none; // Cache la nav desktop sur petits écrans
+    }
+    .mobile-nav {
+      display: flex; // Affiche les boutons mobiles
+    }
+  }
+}
+
+/* 4. Menu déroulant mobile */
+  .mobile-menu-dropdown {
+    display: none; // Caché par défaut
+    position: absolute;
+    top: 80px; // Juste en dessous du header (qui fait 80px de haut)
+    left: 0;
+    width: 100%;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 16px 24px;
+    z-index: 100;
+
+    &.open {
+      display: block; // S'affiche quand la classe .open est présente
+    }
+
+    .mobile-category-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      a {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333333;
+        display: block;
+        padding: 8px 0;
+        border-bottom: 1px solid #f1f5f9;
+
+        &:hover {
+          color: #004999;
+        }
+      }
+    }
+  }
