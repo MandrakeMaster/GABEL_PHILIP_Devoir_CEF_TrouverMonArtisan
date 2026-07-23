@@ -1,0 +1,45 @@
+@use 'config' as *;
+
+.artisan-card {
+  border: 2px solid $color-primary !important;
+  border-radius: 35px !important;
+  background-color: transparent !important;
+  width: 100%;
+  max-width: 320px; // Par défaut sur grand écran
+  margin: 0 auto;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  height: 100%;
+
+  // Ajustement pour les petits écrans (mobiles)
+  @media (max-width: 576px) {
+    max-width: 280px; // Tu peux ajuster cette valeur selon tes préférences (ex: 280px ou 90%)
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 116, 199, 0.15);
+  }
+
+  .artisan-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: $color-secondary !important;
+  }
+
+  .artisan-info {
+    font-size: 0.9rem;
+    color: $color-text !important;
+  }
+
+  .stars {
+    color: $color-primary !important;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+  }
+
+  .note-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: $color-primary !important;
+  }
+}

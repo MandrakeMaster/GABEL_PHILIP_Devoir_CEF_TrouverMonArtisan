@@ -1,5 +1,14 @@
 USE trouve_ton_artisan;
 
+-- Désactiver les contraintes de clés étrangères
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Vider les tables existantes pour éviter les doublons si on relance le script
+DELETE FROM artisan;
+DELETE FROM specialite;
+DELETE FROM categorie;
+
+
 -- Insertion des catégories (Niveau 1)
 INSERT INTO categorie (nom) VALUES
 ('Alimentation'),
@@ -44,3 +53,6 @@ INSERT INTO artisan (nom, email, telephone, note, ville, description, site_web, 
 ('Le monde des fleurs', 'contact@le-monde-des-fleurs-annonay.fr', '0400000000', 4.6, 'Annonay', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eleifend ante sem, id volutpat massa fermentum nec. Praesent volutpat scelerisque mauris, quis sollicitudin tellus sollicitudin. ', 'https://le-monde-des-fleurs-annonay.fr', 0, 13),
 ('Valérie Laderoute', 'v-laredoute@gmail.com', '0400000000', 4.5, 'Valence', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eleifend ante sem, id volutpat massa fermentum nec. Praesent volutpat scelerisque mauris, quis sollicitudin tellus sollicitudin. ', NULL, 0, 14),
 ('CM Graphisme', 'contact@cm-graphisme.com', '0400000000', 4.4, 'Valence', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eleifend ante sem, id volutpat massa fermentum nec. Praesent volutpat scelerisque mauris, quis sollicitudin tellus sollicitudin. ', 'https://cm-graphisme.com', 0, 15);
+
+-- Réactiver les contraintes
+SET FOREIGN_KEY_CHECKS = 1;

@@ -1,11 +1,14 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors'); // 👈 1. Importe cors
 
 require('dotenv').config({ path: './env/.env' });
 
 const db = require("./models");
 
 const app = express();
+
+app.use(cors()); // 👈 2. Active cors pour autoriser ton front Next.js
 
 const artisanRoutes = require('./routes/artisanRoutes');
 const specialiteRoutes = require('./routes/specialiteRoutes');
