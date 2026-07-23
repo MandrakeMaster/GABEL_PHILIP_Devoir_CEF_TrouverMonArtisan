@@ -1,0 +1,39 @@
+@use 'config' as *;
+
+.main-footer {
+  background-color: $color-primary; // Charte: #0074c7
+  color: #ffffff;
+  width: 100%;
+  margin-top: auto;
+
+  .footer-contact-title {
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+
+  .footer-address {
+    font-size: 0.9rem;
+    font-family: $font-stack;
+    font-style: normal;
+    line-height: 1.4;
+  }
+
+  .footer-phone,
+  .footer-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      text-decoration: underline;
+      opacity: 0.85;
+    }
+  }
+
+  .footer-divider {
+    border-color: rgba(255, 255, 255, 0.2);
+    width: 80%;
+    margin: 0 auto;
+  }
+}
