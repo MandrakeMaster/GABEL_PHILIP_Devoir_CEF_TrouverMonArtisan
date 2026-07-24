@@ -1,11 +1,11 @@
-DROP DATABASE IF EXISTS trouve_ton_artisan;
+/*DROP DATABASE IF EXISTS trouve_ton_artisan;
 CREATE DATABASE trouve_ton_artisan CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE trouve_ton_artisan;
 
 DROP USER IF EXISTS 'artisan_admin'@'localhost';
 CREATE USER 'artisan_admin'@'localhost' IDENTIFIED BY 'AdminArtisan2026!';
 GRANT SELECT, INSERT, UPDATE, DELETE ON trouve_ton_artisan.* TO 'artisan_admin'@'localhost';
-FLUSH PRIVILEGES;
+FLUSH PRIVILEGES;*/
 
 CREATE TABLE categorie (
     id_categorie INT AUTO_INCREMENT PRIMARY KEY,
