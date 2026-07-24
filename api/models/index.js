@@ -11,7 +11,11 @@ const sequelize = new Sequelize(
         dialect: 'mysql',
         logging: console.log,
         dialectOptions: {
-            charset: 'utf8mb4'
+            charset: 'utf8mb4',
+            ssl: {
+                require: true,
+                rejectUnauthorized: false
+            }
         }
     }
 );
