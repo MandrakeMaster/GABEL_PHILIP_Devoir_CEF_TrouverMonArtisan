@@ -44,26 +44,36 @@ export default function CategoryPage() {
   }, [categoryId]);
 
   if (loading) {
-    return <div className="container py-5 text-center">Chargement des artisans...</div>;
+    return (
+      <>
+        <title>Chargement - Catégorie</title>
+        <div className="container py-5 text-center">Chargement des artisans...</div>
+      </>
+    );
   }
 
-  return (
-    <main className="container py-5">
-      <h1 className="fw-bold mb-4" style={{ color: 'var(--color-secondary, #00497c)' }}>
-        {category ? category.nom : "Artisans de la catégorie"}
-      </h1>
+  const categoryTitle = category ? category.nom : "Artisans de la catégorie";
 
-      {artisans.length === 0 ? (
-        <p className="text-muted">Aucun artisan n’est actuellement disponible dans cette catégorie.</p>
-      ) : (
-        <div className="row g-4 justify-content-center">
-          {artisans.map((artisan) => (
-            <div className="col-12 col-md-6 col-lg-4" key={artisan.id_artisan || artisan.id}>
-              <ArtisanCard artisan={artisan} />
-            </div>
-          ))}
-        </div>
-      )}
-    </main>
+  return (
+    <>
+      <title>{categoryTitle} - Trouve ton artisan</title>
+      <main className="container py-5">
+        <h1 className="fw-bold mb-4" style={{ color: 'var(--color-secondary, #00497c)' }}>
+          {categoryTitle}
+        </h1>
+
+        {artisans.length === 0 ? (
+          <p className="text-muted">Aucun artisan n’est actuellement disponible dans cette catégorie.</p>
+        ) : (
+          <div className="row g-4 justify-content-center">
+            {artisans.map((artisan) => (
+              <div className="col-12 col-md-6 col-lg-4" key={artisan.id_artisan || artisan.id}>
+                <ArtisanCard artisan={artisan} />
+              </div>
+            ))}
+          </div>
+        )}
+      </main>
+    </>
   );
 }
