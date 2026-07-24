@@ -3,14 +3,17 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation'; // <-- Import du routeur
 import logoArtisan from '@/assets/images/Logo.png';
 import iconBurger from '@/assets/images/icon-burger.svg';
 import iconSearch from '@/assets/images/icon-search.svg';
 
 export default function Header() {
+  const router = useRouter(); // <-- Initialisation
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   
+  const [searchQuery, setSearchQuery] = useState(''); // <-- Stockage de la saisie
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
@@ -33,7 +36,14 @@ export default function Header() {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    console.log("Recherche lancée");
+    if (!searchQuery.trim()) return;
+
+    // Ferme les menus mobiles si ouverts
+    setIsMobileSearchOpen(false);
+    setIsMobileMenuOpen(false);
+
+    // Redirection vers la page de recherche avec le paramètre ?q=...
+    router.push(`/recherche?q=${encodeURIComponent(searchQuery.trim())}`);
   };
 
   return (
@@ -96,7 +106,13 @@ export default function Header() {
 
           <form className="search-form align-items-center d-flex" role="search" onSubmit={handleSearchSubmit}>
             <div className="position-relative w-100">
-              <input className="form-control form-control-sm" type="search" placeholder="Rechercher..." />
+              <input 
+                className="form-control form-control-sm" 
+                type="search" 
+                placeholder="Rechercher..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
               <button type="submit" className="btn position-absolute end-0 top-50 translate-middle-y border-0 bg-transparent p-2 search-btn">
                 <Image src={iconSearch} alt="Valider" width={16} height={16} style={{ width: 'auto', height: 'auto' }} />
               </button>
@@ -133,7 +149,14 @@ export default function Header() {
         <div className="container d-md-none pb-3 mobile-dropdown-search">
           <form className="search-form w-100" role="search" onSubmit={handleSearchSubmit}>
             <div className="position-relative w-100">
-              <input className="form-control form-control-sm" type="search" placeholder="Rechercher..." autoFocus />
+              <input 
+                className="form-control form-control-sm" 
+                type="search" 
+                placeholder="Rechercher..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                autoFocus 
+              />
               <button type="submit" className="btn position-absolute end-0 top-50 translate-middle-y border-0 bg-transparent p-2 search-btn">
                 <Image src={iconSearch} alt="Valider" width={16} height={16} style={{ width: 'auto', height: 'auto' }} />
               </button>

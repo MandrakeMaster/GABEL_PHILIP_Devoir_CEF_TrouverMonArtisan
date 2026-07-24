@@ -1,10 +1,14 @@
 import Link from 'next/link';
 
+export const metadata = {
+  title: "Page non trouvée - Trouve ton artisan",
+  description: "La page que vous avez demandée n'existe pas ou a été déplacée.",
+};
+
 export default function Custom404() {
   return (
     <main className="container py-5 text-center my-auto">
       <div className="py-5">
-        {/* Tu peux adapter le chemin de ton logo si nécessaire */}
         <h1 className="display-1 fw-bold text-primary mb-3">404</h1>
         <h2 className="fw-bold mb-3" style={{ color: 'var(--color-secondary, #00497c)' }}>
           Oups, la page que vous demandez n’existe pas.

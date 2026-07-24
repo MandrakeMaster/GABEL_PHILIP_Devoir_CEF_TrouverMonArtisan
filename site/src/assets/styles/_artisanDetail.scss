@@ -1,0 +1,36 @@
+@use 'config' as *;
+
+.artisan-detail-card, .contact-card {
+  border: 2px solid $color-primary !important;
+  border-radius: 35px !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  
+  h1, h2 {
+    color: $color-secondary !important;
+  }
+}
+
+// Style spécifique pour les champs de formulaire à l'intérieur du cadre
+.contact-card {
+  .form-control {
+    border: 1px solid rgba($color-primary, 0.4);
+    border-radius: 12px;
+    
+    &:focus {
+      border-color: $color-primary;
+      box-shadow: 0 0 0 0.2rem rgba($color-primary, 0.15);
+    }
+  }
+
+  .btn-primary {
+    background-color: $color-primary !important;
+    border: none !important;
+    border-radius: 20px !important;
+    font-weight: 600;
+    
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
