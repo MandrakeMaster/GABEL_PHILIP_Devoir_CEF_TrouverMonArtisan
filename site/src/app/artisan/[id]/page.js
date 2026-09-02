@@ -6,7 +6,8 @@ import { getArtisanById, sendContactMessage, getSpecialites } from '@/services/a
 
 /**
  * Composant de la page de détail d'un artisan.
- * Affiche les informations complètes de l'artisan ainsi qu'un formulaire de contact fonctionnel.
+ * Affiche les informations complètes de l'artisan (profil, description, note, site web) 
+ * ainsi qu'un formulaire de contact interactif validé et sécurisé.
  */
 export default function ArtisanDetailPage() {
   const params = useParams();
@@ -15,8 +16,9 @@ export default function ArtisanDetailPage() {
   const [artisan, setArtisan] = useState(null);
   const [specialiteNom, setSpecialiteNom] = useState('Artisan');
   const [loading, setLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false); // État de chargement pour le formulaire
+  const [isSubmitting, setIsSubmitting] = useState(false); // État de chargement pour la soumission du formulaire
 
+  // État local pour stocker les valeurs des champs du formulaire
   const [formData, setFormData] = useState({
     nom: '',
     email: '',
@@ -27,7 +29,8 @@ export default function ArtisanDetailPage() {
   const [formStatus, setFormStatus] = useState({ type: '', message: '' });
 
   /**
-   * Chargement asynchrone des données de l'artisan et des spécialités associées.
+   * Chargement asynchrone optimisé des données de l'artisan et des spécialités 
+   * via un appel groupé (Promise.all).
    */
   useEffect(() => {
     async function loadArtisanDetails() {
@@ -40,6 +43,7 @@ export default function ArtisanDetailPage() {
 
         setArtisan(artisanData);
 
+        // Association du nom de la spécialité correspondante à partir de son ID
         const foundSpec = specialites.find(s => s.id_specialite === artisanData.id_specialite);
         if (foundSpec) {
           setSpecialiteNom(foundSpec.nom);
@@ -64,32 +68,33 @@ export default function ArtisanDetailPage() {
   };
 
   /**
-   * Valide les champs du formulaire et soumet les données à l'API via le service de contact.
+   * Valide rigoureusement les champs du formulaire côté client 
+   * et transmet les données à l'API via le service de contact.
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormStatus({ type: '', message: '' });
 
-    // Validation du champ Nom
+    // Validation du champ Nom (2 caractères minimum)
     if (!formData.nom || formData.nom.trim().length < 2) {
       setFormStatus({ type: 'error', message: 'Le nom doit contenir au moins 2 caractères.' });
       return;
     }
 
-    // Validation du format de l'Email
+    // Validation du format de l'Email par RegEx
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email || !emailRegex.test(formData.email)) {
       setFormStatus({ type: 'error', message: 'Votre email est obligatoire et doit être valide.' });
       return;
     }
 
-    // Validation de l'Objet
+    // Validation de l'Objet (5 caractères minimum)
     if (!formData.objet || formData.objet.trim().length < 5) {
       setFormStatus({ type: 'error', message: "L'objet du message doit contenir au moins 5 caractères." });
       return;
     }
 
-    // Validation du Message
+    // Validation du Message (10 caractères minimum)
     if (!formData.message || formData.message.trim().length < 10) {
       setFormStatus({ type: 'error', message: 'Le message doit contenir au moins 10 caractères.' });
       return;
@@ -98,11 +103,11 @@ export default function ArtisanDetailPage() {
     try {
       setIsSubmitting(true);
 
-      // Envoi réel des données au back-end
+      // Envoi sécurisé des données au back-end
       await sendContactMessage(id, formData);
 
       setFormStatus({ type: 'success', message: 'Message envoyé avec succès à l\'artisan !' });
-      setFormData({ nom: '', email: '', objet: '', message: '' });
+      setFormData({ nom: '', email: '', objet: '', message: '' }); // Réinitialisation du formulaire
     } catch (error) {
       setFormStatus({ 
         type: 'error', 
@@ -113,6 +118,7 @@ export default function ArtisanDetailPage() {
     }
   };
 
+  // Affichage d'un loader pendant la récupération des données
   if (loading) {
     return (
       <>
@@ -122,6 +128,7 @@ export default function ArtisanDetailPage() {
     );
   }
 
+  // Affichage d'un message si l'artisan n'existe pas
   if (!artisan) {
     return (
       <>
@@ -140,7 +147,7 @@ export default function ArtisanDetailPage() {
       <main className="container py-5">
         <div className="row g-4 justify-content-center align-items-start">
           
-          {/* Bloc Informations de l'artisan */}
+          {/* Bloc 1 : Informations détaillées de l'artisan */}
           <div className="col-12 col-lg-7">
             <div className="artisan-detail-card p-4 text-center">
               
@@ -156,6 +163,7 @@ export default function ArtisanDetailPage() {
                 {artisan.nom}
               </h1>
 
+              {/* Affichage dynamique des étoiles de notation */}
               <div className="stars mb-1 fs-5" aria-label={`Note de ${note} sur 5`}>
                 {[1, 2, 3, 4, 5].map((index) => {
                   if (note >= index) {
@@ -186,7 +194,7 @@ export default function ArtisanDetailPage() {
             </div>
           </div>
 
-          {/* Bloc Contact & Site Web */}
+          {/* Bloc 2 : Formulaire de contact et site web de l'artisan */}
           <div className="col-12 col-lg-5">
             <div className="contact-card p-4">
               <h2 className="fw-bold fs-4 text-center mb-4">
@@ -246,6 +254,7 @@ export default function ArtisanDetailPage() {
                   <small className="text-muted" style={{ fontSize: '0.75rem' }}>10 caractères minimum</small>
                 </div>
 
+                {/* Bouton de soumission avec désactivation conditionnelle pendant l'envoi */}
                 <button 
                   type="submit" 
                   className="btn btn-primary w-100 fw-bold py-2 mt-2"
@@ -255,12 +264,14 @@ export default function ArtisanDetailPage() {
                 </button>
               </form>
 
+              {/* Message de retour (Succès ou Erreur) */}
               {formStatus.message && (
                 <div className={`mt-3 p-2 text-center rounded border ${formStatus.type === 'success' ? 'text-success border-success bg-light' : 'text-danger border-danger bg-light'}`} style={{ fontSize: '0.9rem' }}>
                   {formStatus.message}
                 </div>
               )}
 
+              {/* Lien vers le site web externe de l'artisan (sécurisé) */}
               {artisan.site_web && (
                 <div className="text-center mt-4 pt-3 border-top">
                   <p className="fw-semibold mb-1 text-muted">Visitez notre site :</p>

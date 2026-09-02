@@ -1,12 +1,16 @@
 import Link from 'next/link';
 
+/**
+ * Composant du pied de page (Footer).
+ * Regroupe les informations de contact institutionnelles et les liens vers les pages légales obligatoires.
+ */
 export default function Footer() {
   return (
     <footer className="main-footer">
       <div className="container py-4 py-md-5">
         <div className="row gy-4 align-items-center align-items-md-start justify-content-between text-center text-md-start">
           
-          {/* Bloc gauche : Contact */}
+          {/* Bloc gauche : Informations de contact et adresse officielle */}
           <div className="col-12 col-md-5">
             <p className="footer-contact-title mb-3">Contactez nous :</p>
             <div className="d-flex flex-column flex-md-row align-items-center align-items-md-start gap-2 mb-3">
@@ -24,12 +28,12 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Ligne de séparation visible uniquement sur mobile (Figma) */}
+          {/* Ligne de séparation visible uniquement sur support mobile (conformité Figma) */}
           <div className="col-12 d-md-none">
             <hr className="footer-divider my-1" />
           </div>
 
-          {/* Bloc droit : Liens légaux */}
+          {/* Bloc droit : Liens vers les pages légales obligatoires */}
           <div className="col-12 col-md-7">
             <div className="row gy-3">
               <div className="col-12 col-md-6">

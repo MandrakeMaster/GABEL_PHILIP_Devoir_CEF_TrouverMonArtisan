@@ -1,20 +1,25 @@
 @use 'config' as *;
 
+// ==========================================
+// COMPOSANT : Carte Artisan
+// ==========================================
+
 .artisan-card {
   border: 2px solid $color-primary !important;
   border-radius: 35px !important;
   background-color: transparent !important;
   width: 100%;
-  max-width: 320px; // Par défaut sur grand écran
+  max-width: 320px;
   margin: 0 auto;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   height: 100%;
 
-  // Ajustement pour les petits écrans (mobiles)
+  // Ajustement responsive pour petits mobiles
   @media (max-width: 576px) {
-    max-width: 280px; // Tu peux ajuster cette valeur selon tes préférences (ex: 280px ou 90%)
+    max-width: 280px;
   }
 
+  // Effet de survol interactif
   &:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 15px rgba(0, 116, 199, 0.15);

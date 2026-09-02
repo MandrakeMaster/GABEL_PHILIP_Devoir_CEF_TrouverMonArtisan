@@ -1,18 +1,26 @@
 import ArtisanCard from '@/components/ArtisanCard';
-import { getTopArtisans } from '@/services/artisanService'; // <-- Import du service front-end
+import { getTopArtisans } from '@/services/artisanService'; // Import du service front-end dédié
 
+/**
+ * Métadonnées spécifiques pour la page d'accueil (optimisation SEO).
+ */
 export const metadata = {
   title: 'Accueil | Trouve ton Artisan',
   description: 'Trouvez facilement un artisan qualifié en région Auvergne-Rhône-Alpes et contactez-le en quelques clics.',
 };
 
+/**
+ * Composant de la page d'accueil (Server Component par défaut dans Next.js).
+ * Récupère les données des "artisans du mois" côté serveur et structure la présentation de la plateforme.
+ */
 export default async function Home() {
-  // Appel propre via la couche services
+  // Récupération asynchrone des artisans "coup de cœur" via la couche services
   const artisansMois = await getTopArtisans();
 
   return (
     <div className="home-page py-4 py-md-5">
-      {/* Section 1 : Comment trouver mon artisan ? (Sans cadres, épuré) */}
+      
+      {/* Section 1 : Guide d'utilisation ("Comment trouver mon artisan ?") */}
       <section className="container mb-5 text-center">
         <h1 className="fw-bold mb-5" style={{ color: 'var(--color-secondary, #00497c)' }}>
           Comment trouver mon artisan ?
@@ -46,12 +54,13 @@ export default async function Home() {
         </ol>
       </section>
 
-      {/* Section 2 : Les artisans du mois (Top 3 avec les cartes ovales bleues) */}
+      {/* Section 2 : Mise en avant des "artisans du mois" (Top 3) */}
       <section className="container">
         <h2 className="text-center fw-bold mb-4" style={{ color: 'var(--color-secondary, #00497c)' }}>
           Les artisans du mois
         </h2>
 
+        {/* Gestion conditionnelle en cas de données vides ou d'indisponibilité de l'API */}
         {artisansMois.length === 0 ? (
           <p className="text-center text-muted">Chargement des artisans ou indisponibilité de l’API...</p>
         ) : (

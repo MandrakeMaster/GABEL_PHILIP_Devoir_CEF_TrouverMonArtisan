@@ -3,8 +3,12 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ArtisanCard from '@/components/ArtisanCard';
-import { getArtisans, getSpecialites } from '@/services/artisanService'; // <-- Import des services
+import { getArtisans, getSpecialites } from '@/services/artisanService'; // Import des services front-end
 
+/**
+ * Composant interne gérant la logique de recherche et le filtrage des artisans.
+ * Utilise useSearchParams pour récupérer le terme saisi dans l'URL.
+ */
 function SearchContent() {
   const searchParams = useSearchParams();
   const query = searchParams.get('q')?.toLowerCase() || '';
@@ -17,23 +21,25 @@ function SearchContent() {
       try {
         setLoading(true);
 
-        // On récupère en parallèle les artisans et les spécialités via les services
+        // Récupération en parallèle de tous les artisans et des spécialités via les services
         const [allArtisans, specialites] = await Promise.all([
           getArtisans(),
-          getSpecialites().catch(() => []) // Fallback si les spécialités échouent
+          getSpecialites().catch(() => []) // Fallback si la récupération des spécialités échoue
         ]);
 
+        // Création d'une table de correspondance (Map) des spécialités par ID
         let specialitesMap = {};
         specialites.forEach((spec) => {
           specialitesMap[spec.id_specialite] = spec.nom;
         });
 
-        // On enrichit chaque artisan avec le nom de sa spécialité pour le composant carte
+        // Enrichissement de chaque artisan avec le libellé de sa spécialité
         const artisansWithSpecialty = allArtisans.map((artisan) => ({
           ...artisan,
           specialite: specialitesMap[artisan.id_specialite] || 'Artisan'
         }));
 
+        // Filtrage multicritères si une requête de recherche est présente
         if (query.trim()) {
           const filtered = artisansWithSpecialty.filter((artisan) => {
             const name = artisan.nom?.toLowerCase() || '';
@@ -41,6 +47,7 @@ function SearchContent() {
             const postalCode = artisan.code_postal?.toString() || '';
             const specialtyName = artisan.specialite.toLowerCase();
 
+            // La recherche s'applique sur le nom, la ville, le code postal ou la spécialité
             return (
               name.includes(query) ||
               city.includes(query) ||
@@ -69,6 +76,7 @@ function SearchContent() {
         Résultats de recherche pour : &quot;{query}&quot;
       </h1>
 
+      {/* Affichage conditionnel selon l'état de chargement ou les résultats */}
       {loading ? (
         <div className="container py-5 text-center">Recherche en cours...</div>
       ) : artisans.length === 0 ? (
@@ -86,6 +94,10 @@ function SearchContent() {
   );
 }
 
+/**
+ * Composant principal de la page de recherche.
+ * Enveloppe le contenu dans une limite Suspense (requis par Next.js pour l'utilisation de useSearchParams).
+ */
 export default function SearchPage() {
   return (
     <>
