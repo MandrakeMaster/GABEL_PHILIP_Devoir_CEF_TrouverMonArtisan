@@ -1,5 +1,8 @@
 const { DataTypes } = require('sequelize');
 
+/**
+ * Définition du modèle Sequelize pour la table 'categorie'.
+ */
 module.exports = (sequelize) => {
     const Categorie = sequelize.define('Categorie', {
         id_categorie: {

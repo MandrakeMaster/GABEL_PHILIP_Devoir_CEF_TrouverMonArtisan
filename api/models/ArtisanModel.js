@@ -1,5 +1,8 @@
 const { DataTypes } = require('sequelize');
 
+/**
+ * Définition du modèle Sequelize pour la table 'artisan'.
+ */
 module.exports = (sequelize) => {
     const Artisan = sequelize.define('Artisan', {
         id_artisan: {
@@ -45,7 +48,7 @@ module.exports = (sequelize) => {
         }
     }, {
         tableName: 'artisan',
-        timestamps: false // Désactive l'ajout automatique des champs createdAt et updatedAt si tu ne les as pas dans ton SQL
+        timestamps: false // Désactive les champs createdAt et updatedAt
     });
 
     return Artisan;

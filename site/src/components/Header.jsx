@@ -3,46 +3,41 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation'; // <-- Import du routeur
+import { useRouter } from 'next/navigation';
+import { fetchCategories } from '@/services/api'; // <-- Import du service front-end
 import logoArtisan from '@/assets/images/Logo.png';
 import iconBurger from '@/assets/images/icon-burger.svg';
 import iconSearch from '@/assets/images/icon-search.svg';
 
 export default function Header() {
-  const router = useRouter(); // <-- Initialisation
+  const router = useRouter();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   
-  const [searchQuery, setSearchQuery] = useState(''); // <-- Stockage de la saisie
+  const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
   useEffect(() => {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-
-    async function fetchCategories() {
+    async function loadCategories() {
       try {
-        const response = await fetch(`${API_URL}/api/categories`);
-        const data = await response.json();
+        const data = await fetchCategories(); // <-- Appel propre via le service
         setCategories(data);
       } catch (error) {
-        console.error("Erreur chargement catégories :", error);
+        console.error("Erreur chargement catégories dans le header :", error);
       } finally {
         setLoading(false);
       }
     }
-    fetchCategories();
+    loadCategories();
   }, []);
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
 
-    // Ferme les menus mobiles si ouverts
     setIsMobileSearchOpen(false);
     setIsMobileMenuOpen(false);
-
-    // Redirection vers la page de recherche avec le paramètre ?q=...
     router.push(`/recherche?q=${encodeURIComponent(searchQuery.trim())}`);
   };
 

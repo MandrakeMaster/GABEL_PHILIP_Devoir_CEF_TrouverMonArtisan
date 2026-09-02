@@ -1,5 +1,8 @@
 const { DataTypes } = require('sequelize');
 
+/**
+ * Définition du modèle Sequelize pour la table 'specialite'.
+ */
 module.exports = (sequelize) => {
     const Specialite = sequelize.define('Specialite', {
         id_specialite: {
