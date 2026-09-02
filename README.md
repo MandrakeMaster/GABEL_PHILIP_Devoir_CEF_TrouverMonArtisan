@@ -1,65 +1,61 @@
-Trouve ton artisan - Région Auvergne-Rhône-Alpes
-Plateforme web de mise en relation entre les particuliers et les artisans de la région Auvergne-Rhône-Alpes, réalisée dans le cadre d'une formation de développement web.
+# Trouve ton artisan
 
-🚀 Fonctionnalités
-Consultation des artisans par catégorie et mise en avant des artisans du mois.
+Application web full-stack permettant de rechercher des artisans locaux, de consulter leurs fiches détaillées par catégorie ou spécialité, et de les contacter via un formulaire dédié.
 
-Affichage détaillé d'un profil artisan (note, spécialité, localisation, description, site web).
+## Prérequis techniques
+Avant de commencer, assurez-vous d'avoir installé sur votre machine :
+* **Node.js** (version LTS recommandée)
+* **MySQL** (via un serveur local comme WampServer, XAMPP ou un service MySQL autonome)
+* **Git**
 
-Formulaire de contact interactif avec validation des champs.
+---
 
-Barre de recherche dynamique par nom, ville, code postal ou spécialité.
+## Guide d'installation et de lancement
 
-Pages légales, accessibilité, gestion des cookies et page 404 personnalisée.
+Aucune modification de code source n'est nécessaire. Ouvrez un terminal et suivez séquentiellement les étapes ci-dessous.
 
-Optimisation SEO (titres et métadonnées configurés sur toutes les pages).
+### 1. Récupération du projet
+Clonez le dépôt sur votre machine et positionnez-vous à la racine du projet :
+```
+git clone https://github.com/MandrakeMaster/GABEL_PHILIP_Devoir_CEF_TrouverMonArtisan
+cd GABEL_PHILIP_Devoir_CEF_TrouverMonArtisan
+```
 
-🛠️ Technologies utilisées
-Back-end : Node.js, Express, Sequelize (ORM)
+### 2. Initialisation de la base de donnée
 
-Base de données : MySQL
+   * Exécutez le script de structure `schema.sql` pour créer la base `trouve_ton_artisan` et ses tables.
+   * Exécutez ensuite le script de données `data.sql` pour peupler la base avec les catégories, spécialités et artisans.
 
-Front-end : Next.js (App Router), React, Bootstrap, Sass
 
-Versionning : Git / GitHub
 
-📂 Structure du projet
-/api : Code source de l'API Node.js/Express.
+### 3. Configuration des environnements
 
-/database : Scripts SQL de création de la base de données et des jeux d'essais.
-
-/site : Application front-end Next.js.
-
-⚙️ Installation et Lancement
-1. Cloner le dépôt
-git clone
-
-2. Base de données
-Importer le script SQL de création situé dans /database pour créer la base et configurer l'utilisateur dédié.
-
-Importer le jeu d'essais pour alimenter les tables.
-
-3. Lancer l'API
-Se rendre dans le dossier de l'API :
-cd api
-
-Installer les dépendances :
-npm install
-
-Créer un fichier .env à la racine du dossier api avec les informations suivantes :
+Dans le dossier `api/`, créez un fichier `.env` en y renseignant vos accès :
+```
 PORT=5000
-DB_NAME=trouve_ton_artisan
-DB_USER=artisan_admin
-DB_PASSWORD=votre_mot_de_passe
 DB_HOST=localhost
-DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=trouve_ton_artisan
+DB_DIALECT=mysql
+```
 
-Lancer le serveur en mode développement :
-npm run dev
+Dans le dossier site/, créez un fichier .env.local pour configurer l'URL de l'API :
 
-4. Lancer le Front-end
-Installer les dépendances dans le dossier du front-end :
+NEXT_PUBLIC_API_URL=http://localhost:5000
+
+### 4. Lancement du Back-end (API)
+
+Ouvrez un premier terminal, positionnez-vous dans le dossier de l'API, installez les dépendances et lancez le serveur :
+```
+cd api
 npm install
-
-Lancer l'application en mode développement :
+npm start
+```
+### 5. Lancement du Front-end (Site Next.js)
+Ouvrez un second terminal (laissez le premier tourner), positionnez-vous dans le dossier du site, installez les dépendances et lancez l'application en mode développement :
+```
+cd site
+npm install
 npm run dev
+```

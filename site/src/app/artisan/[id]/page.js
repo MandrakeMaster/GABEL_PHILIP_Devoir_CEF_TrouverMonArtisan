@@ -2,7 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import { getArtisanById, sendContactMessage, getSpecialites } from '@/services/artisanService';
 
+/**
+ * Composant de la page de détail d'un artisan.
+ * Affiche les informations complètes de l'artisan ainsi qu'un formulaire de contact fonctionnel.
+ */
 export default function ArtisanDetailPage() {
   const params = useParams();
   const id = params.id;
@@ -10,6 +15,7 @@ export default function ArtisanDetailPage() {
   const [artisan, setArtisan] = useState(null);
   const [specialiteNom, setSpecialiteNom] = useState('Artisan');
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false); // État de chargement pour le formulaire
 
   const [formData, setFormData] = useState({
     nom: '',
@@ -20,28 +26,23 @@ export default function ArtisanDetailPage() {
 
   const [formStatus, setFormStatus] = useState({ type: '', message: '' });
 
+  /**
+   * Chargement asynchrone des données de l'artisan et des spécialités associées.
+   */
   useEffect(() => {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-
-    async function fetchArtisanDetails() {
+    async function loadArtisanDetails() {
       try {
         setLoading(true);
-        const [resArtisan, resSpecialites] = await Promise.all([
-          fetch(`${API_URL}/api/artisans/${id}`),
-          fetch(`${API_URL}/api/specialites`)
+        const [artisanData, specialites] = await Promise.all([
+          getArtisanById(id),
+          getSpecialites()
         ]);
 
-        if (resArtisan.ok) {
-          const artisanData = await resArtisan.json();
-          setArtisan(artisanData);
+        setArtisan(artisanData);
 
-          if (resSpecialites.ok) {
-            const specialites = await resSpecialites.json();
-            const foundSpec = specialites.find(s => s.id_specialite === artisanData.id_specialite);
-            if (foundSpec) {
-              setSpecialiteNom(foundSpec.nom);
-            }
-          }
+        const foundSpec = specialites.find(s => s.id_specialite === artisanData.id_specialite);
+        if (foundSpec) {
+          setSpecialiteNom(foundSpec.nom);
         }
       } catch (error) {
         console.error("Erreur chargement détails artisan :", error);
@@ -51,41 +52,65 @@ export default function ArtisanDetailPage() {
     }
 
     if (id) {
-      fetchArtisanDetails();
+      loadArtisanDetails();
     }
   }, [id]);
 
+  /**
+   * Met à jour dynamiquement l'état local du formulaire lors de la saisie utilisateur.
+   */
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  /**
+   * Valide les champs du formulaire et soumet les données à l'API via le service de contact.
+   */
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormStatus({ type: '', message: '' });
 
+    // Validation du champ Nom
     if (!formData.nom || formData.nom.trim().length < 2) {
       setFormStatus({ type: 'error', message: 'Le nom doit contenir au moins 2 caractères.' });
       return;
     }
 
+    // Validation du format de l'Email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!formData.email || !emailRegex.test(formData.email)) {
       setFormStatus({ type: 'error', message: 'Votre email est obligatoire et doit être valide.' });
       return;
     }
 
+    // Validation de l'Objet
     if (!formData.objet || formData.objet.trim().length < 5) {
       setFormStatus({ type: 'error', message: "L'objet du message doit contenir au moins 5 caractères." });
       return;
     }
 
+    // Validation du Message
     if (!formData.message || formData.message.trim().length < 10) {
       setFormStatus({ type: 'error', message: 'Le message doit contenir au moins 10 caractères.' });
       return;
     }
 
-    setFormStatus({ type: 'success', message: 'Message envoyé avec succès !' });
-    setFormData({ nom: '', email: '', objet: '', message: '' });
+    try {
+      setIsSubmitting(true);
+
+      // Envoi réel des données au back-end
+      await sendContactMessage(id, formData);
+
+      setFormStatus({ type: 'success', message: 'Message envoyé avec succès à l\'artisan !' });
+      setFormData({ nom: '', email: '', objet: '', message: '' });
+    } catch (error) {
+      setFormStatus({ 
+        type: 'error', 
+        message: "Une erreur est survenue lors de l'envoi du message. Veuillez réessayer." 
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (loading) {
@@ -221,8 +246,12 @@ export default function ArtisanDetailPage() {
                   <small className="text-muted" style={{ fontSize: '0.75rem' }}>10 caractères minimum</small>
                 </div>
 
-                <button type="submit" className="btn btn-primary w-100 fw-bold py-2 mt-2">
-                  Envoyer
+                <button 
+                  type="submit" 
+                  className="btn btn-primary w-100 fw-bold py-2 mt-2"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Envoi en cours...' : 'Envoyer'}
                 </button>
               </form>
 

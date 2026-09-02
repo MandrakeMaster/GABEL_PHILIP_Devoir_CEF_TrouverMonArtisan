@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import ArtisanCard from '@/components/ArtisanCard';
+import { getCategories } from '@/services/categoryServices'; // <-- Import service catégorie
+import { getArtisansByCategory } from '@/services/artisanService'; // <-- Import service artisan
 
 export default function CategoryPage() {
   const params = useParams();
@@ -13,23 +15,18 @@ export default function CategoryPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-
-    async function fetchCategoryData() {
+    async function loadCategoryData() {
       try {
-        const catResponse = await fetch(`${API_URL}/api/categories`);
-        const categories = await catResponse.json();
+        setLoading(true);
+        // Utilisation des services front-end en parallèle
+        const [categories, artisansData] = await Promise.all([
+          getCategories(),
+          getArtisansByCategory(categoryId).catch(() => []) // Fallback si la route renvoie une erreur
+        ]);
+
         const currentCat = categories.find((c) => c.id_categorie.toString() === categoryId);
         setCategory(currentCat);
-
-        const artisansResponse = await fetch(`${API_URL}/api/artisans/categorie/${categoryId}`);
-        
-        if (artisansResponse.ok) {
-          const data = await artisansResponse.json();
-          setArtisans(data);
-        } else {
-          setArtisans([]);
-        }
+        setArtisans(artisansData);
 
       } catch (error) {
         console.error("Erreur lors du chargement des données de la catégorie :", error);
@@ -39,7 +36,7 @@ export default function CategoryPage() {
     }
 
     if (categoryId) {
-      fetchCategoryData();
+      loadCategoryData();
     }
   }, [categoryId]);
 

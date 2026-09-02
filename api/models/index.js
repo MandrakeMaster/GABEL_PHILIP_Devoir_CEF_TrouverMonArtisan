@@ -1,6 +1,9 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
-// Initialisation de l'instance Sequelize avec les variables d'environnement de connexion
+/**
+ * Initialisation de l'instance Sequelize avec les variables d'environnement.
+ * Le SSL est activé uniquement si explicitement requis (ex: en production).
+ */
 const sequelize = new Sequelize(
     process.env.DB_NAME,
     process.env.DB_USER,
@@ -9,14 +12,16 @@ const sequelize = new Sequelize(
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
         dialect: 'mysql',
-        logging: console.log,
         dialectOptions: {
             charset: 'utf8mb4',
-            ssl: {
-                require: true,
-                rejectUnauthorized: false
-            }
-        }
+            ...(process.env.DB_SSL === 'true' && {
+                ssl: {
+                    require: true,
+                    rejectUnauthorized: false
+                }
+            })
+        },
+        logging: process.env.NODE_ENV !== 'production' ? console.log : false
     }
 );
 
@@ -25,7 +30,7 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-// Importation et enregistrement des modèles en leur injectant l'instance Sequelize
+// Importation et enregistrement des modèles
 db.Categorie = require('./CategorieModel')(sequelize);
 db.Specialite = require('./SpecialiteModel')(sequelize);
 db.Artisan = require('./ArtisanModel')(sequelize);

@@ -1,5 +1,8 @@
 const categorieService = require('../services/categorieService');
 
+/**
+ * Récupère et retourne la liste complète de toutes les catégories.
+ */
 exports.getAllCategories = async (req, res) => {
     try {
         const categories = await categorieService.getAllCategories();

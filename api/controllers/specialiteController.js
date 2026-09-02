@@ -1,5 +1,8 @@
 const specialiteService = require('../services/specialiteService');
 
+/**
+ * Récupère et retourne la liste complète de toutes les spécialités.
+ */
 exports.getAllSpecialites = async (req, res) => {
     try {
         const specialites = await specialiteService.getAllSpecialites();

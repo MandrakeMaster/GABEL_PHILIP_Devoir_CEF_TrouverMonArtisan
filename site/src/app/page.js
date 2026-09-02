@@ -1,25 +1,13 @@
 import ArtisanCard from '@/components/ArtisanCard';
+import { getTopArtisans } from '@/services/artisanService'; // <-- Import du service front-end
 
 export const metadata = {
   title: 'Accueil | Trouve ton Artisan',
   description: 'Trouvez facilement un artisan qualifié en région Auvergne-Rhône-Alpes et contactez-le en quelques clics.',
 };
 
-async function getTopArtisans() {
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-  try {
-    const res = await fetch(`${API_URL}/api/artisans/top`, { cache: 'no-store' });
-    if (!res.ok) {
-      throw new Error('Erreur lors de la récupération des artisans du mois');
-    }
-    return await res.json();
-  } catch (error) {
-    console.error("Erreur API :", error);
-    return [];
-  }
-}
-
 export default async function Home() {
+  // Appel propre via la couche services
   const artisansMois = await getTopArtisans();
 
   return (
