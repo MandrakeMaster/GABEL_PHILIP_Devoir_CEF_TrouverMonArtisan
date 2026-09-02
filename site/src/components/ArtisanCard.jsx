@@ -1,11 +1,17 @@
 import Link from 'next/link';
 
+/**
+ * Composant représentant une carte d'artisan.
+ * Affiche le nom, la spécialité, la ville et les étoiles de notation de manière dynamique.
+ */
 export default function ArtisanCard({ artisan }) {
+  // Normalisation des données pour assurer la compatibilité avec différentes structures d'API (Sequelize ou objets bruts)
   const specialiteNom = artisan.specialite || artisan.Specialite?.nom || 'Artisan';
   const villeNom = artisan.ville || artisan.localisation || '';
   const note = Number(artisan.note) || 0;
 
   return (
+    // Lien dynamique vers la fiche détaillée de l'artisan
     <Link href={`/artisan/${artisan.id_artisan || artisan.id}`} className="text-decoration-none d-block">
       <div className="artisan-card py-3 px-4 text-center d-flex flex-column justify-content-between">
         <div>

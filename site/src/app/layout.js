@@ -3,10 +3,14 @@ import '../assets/styles/main.scss';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-// Import de tes favicons depuis ton dossier assets
+// Import des favicons depuis le dossier des assets
 import favicon16 from '../assets/images/favicon.png';
 import favicon32 from '../assets/images/favicon-32.png';
 
+/**
+ * Métadonnées globales de l'application (SEO de base).
+ * Gère le titre, la description par défaut et les favicons multi-résolutions.
+ */
 export const metadata = {
   title: 'Trouve ton Artisan',
   description: 'Site de recherche d artisans',
@@ -18,6 +22,11 @@ export const metadata = {
   },
 };
 
+/**
+ * Composant racine de mise en page (RootLayout).
+ * Encadre l'ensemble des pages de l'application avec le Header et le Footer, 
+ * tout en injectant les feuilles de style globales (Bootstrap et Sass).
+ */
 export default function RootLayout({ children }) {
   return (
     <html lang="fr">

@@ -1,7 +1,11 @@
 @use 'config' as *;
 
+// ==========================================
+// COMPOSANT : Pied de page (Footer)
+// ==========================================
+
 .main-footer {
-  background-color: $color-primary; // Charte: #0074c7
+  background-color: $color-primary; // Couleur primaire de la charte
   color: #ffffff;
   width: 100%;
   margin-top: auto;

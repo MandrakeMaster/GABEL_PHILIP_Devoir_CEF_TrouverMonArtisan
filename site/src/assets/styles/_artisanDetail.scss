@@ -1,5 +1,10 @@
 @use 'config' as *;
 
+// ==========================================
+// COMPOSANT : Fiche Artisan & Contact
+// ==========================================
+
+// Style global partagé pour les cartes de détail et de contact
 .artisan-detail-card, .contact-card {
   border: 2px solid $color-primary !important;
   border-radius: 35px !important;
@@ -11,7 +16,7 @@
   }
 }
 
-// Style spécifique pour les champs de formulaire à l'intérieur du cadre
+// Styles spécifiques pour le formulaire interactif de contact
 .contact-card {
   .form-control {
     border: 1px solid rgba($color-primary, 0.4);

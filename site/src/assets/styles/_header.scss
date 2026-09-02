@@ -1,5 +1,9 @@
 @use 'config' as *;
 
+// ==========================================
+// COMPOSANT : En-tête de page (Header & Navbar)
+// ==========================================
+
 .main-header {
   background-color: $color-bg-light;
   width: 100%;
@@ -10,6 +14,7 @@
     padding-bottom: 0;
   }
 
+  // Gestion du logo et de sa taille responsive
   .logo-link {
     flex-shrink: 0;
     img {
@@ -23,6 +28,7 @@
     }
   }
 
+  // Liens de navigation principaux
   .navbar-nav {
     flex-wrap: nowrap;
     gap: 0.2rem;
@@ -49,11 +55,12 @@
     }
   }
 
+  // Barre de recherche intégrée au header
   .search-form {
     flex-shrink: 1; 
     width: 100%;
     
-    // Entre 768px et 1050px : on sécurise une largeur fluide pour éviter qu'elle ne saute
+    // Sécurisation d'une largeur fluide sur tablettes pour éviter les sauts
     @media screen and (min-width: 768px) and (max-width: 1050px) {
       width: 110px; 
     }
@@ -86,6 +93,7 @@
     }
   }
 
+  // Éléments interactifs mobiles (boutons burger et recherche)
   .burger-toggle, .search-mobile-toggle {
     &:focus {
       box-shadow: none; 
